@@ -36,31 +36,18 @@ if ( ini_get( 'register_globals' ) ) {
 
 define( 'PHP_API', true );
 
-	# Get MWInit class
-	require_once( "$IP/includes/Init.php" );
-
-	# Start profiler
-	# FIXME: rewrite wfProfileIn/wfProfileOut so that they can work in compiled mode
-	if ( file_exists( "$IP/StartProfiler.php" ) ) {
-		require_once( "$IP/StartProfiler.php" );
-	} else {
-		require_once( "$IP/includes/ProfilerStub.php" );
-	}
-
-	# Load up some global defines.
-	require_once( "$IP/includes/Defines.php" );
-
-	# Start the autoloader, so that extensions can derive classes from core files
-	require_once( "$IP/includes/AutoLoader.php" );
+# Start the autoloader, so that extensions can derive classes from core files
+require_once( 'includes/AutoLoader.php' );
 
 # Initialise output buffering
 # Check that there is no previous output or previously set up buffers, because
 # that would cause us to potentially mix gzip and non-gzip output, creating a
 # big mess.
-if ( !defined( 'MW_NO_OUTPUT_BUFFER' ) && ob_get_level() == 0 ) {
+if ( ob_get_level() == 0 ) {
 	if ( !defined( 'MW_COMPILED' ) ) {
 		require_once( "$IP/includes/OutputHandler.php" );
 	}
 	ob_start( 'wfOutputHandler' );
 }
 
+$wgRequest = new WebRequest;
