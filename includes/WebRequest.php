@@ -257,7 +257,6 @@ class WebRequest {
 			$data = $this->normalizeUnicode( $data );
 			return $data;
 		} else {
-			taint( $default );
 			return $default;
 		}
 	}

@@ -34,14 +34,18 @@
  * in the URL.
  */
 
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 // So extensions (and other code) can check whether they're running in API mode
 define( 'MW_API', true );
 
-// Initialise common code
-require ( dirname( __FILE__ ) . '/includes/WebStart.php' );
+$apiDir = dirname( __FILE__ );
 
-wfProfileIn( 'api.php' );
-$starttime = microtime( true );
+$globAPIModules = array();
+
+// Initialise common code
+require ( $apiDir . '/includes/WebStart.php' );
 
 // URL safety checks
 //
@@ -60,57 +64,11 @@ if ( $wgRequest->isPathInfoBad() ) {
 	return;
 }
 
-// Verify that the API has not been disabled
-if ( !$wgEnableAPI ) {
-	echo 'MediaWiki API is not enabled for this site. Add the following line to your LocalSettings.php';
-	echo '<pre><b>$wgEnableAPI=true;</b></pre>';
-	die( 1 );
-}
-
-// Selectively allow cross-site AJAX
-
-/*
- * Helper function to convert wildcard string into a regex
- * '*' => '.*?'
- * '?' => '.'
- * @ return string
- */
-function convertWildcard( $search ) {
-	$search = preg_quote( $search, '/' );
-	$search = str_replace(
-		array( '\*', '\?' ),
-		array( '.*?', '.' ),
-		$search
-	);
-	return "/$search/";
-}
-
-if ( $wgCrossSiteAJAXdomains && isset( $_SERVER['HTTP_ORIGIN'] ) ) {
-	$exceptions = array_map( 'convertWildcard', $wgCrossSiteAJAXdomainExceptions );
-	$regexes = array_map( 'convertWildcard', $wgCrossSiteAJAXdomains );
-	foreach ( $regexes as $regex ) {
-		if ( preg_match( $regex, $_SERVER['HTTP_ORIGIN'] ) ) {
-			foreach ( $exceptions as $exc ) { // Check against exceptions
-				if ( preg_match( $exc, $_SERVER['HTTP_ORIGIN'] ) ) {
-					break 2;
-				}
-			}
-			header( "Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}" );
-			header( 'Access-Control-Allow-Credentials: true' );
-			break;
-		}
-	}
-}
-
-// Set a dummy $wgTitle, because $wgTitle == null breaks various things
-// In a perfect world this wouldn't be necessary
-$wgTitle = Title::makeTitle( NS_MAIN, 'API' );
-
 /* Construct an ApiMain with the arguments passed via the URL. What we get back
  * is some form of an ApiMain, possibly even one that produces an error message,
  * but we don't care here, as that is handled by the ctor.
  */
-$processor = new ApiMain( $wgRequest, $wgEnableWriteAPI );
+$processor = new ApiMain( $wgRequest );
 
 // Process data & print results
 $processor->execute();

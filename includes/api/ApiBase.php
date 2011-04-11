@@ -476,7 +476,7 @@ abstract class ApiBase {
 	 */
 	public function getFinalParams() {
 		$params = $this->getAllowedParams();
-		wfRunHooks( 'APIGetAllowedParams', array( &$this, &$params ) );
+		apiRunHooks( 'APIGetAllowedParams', array( &$this, &$params ) );
 		return $params;
 	}
 
@@ -487,7 +487,7 @@ abstract class ApiBase {
 	 */
 	public function getFinalParamDescription() {
 		$desc = $this->getParamDescription();
-		wfRunHooks( 'APIGetParamDescription', array( &$this, &$desc ) );
+		apiRunHooks( 'APIGetParamDescription', array( &$this, &$desc ) );
 		return $desc;
 	}
 
@@ -946,7 +946,6 @@ abstract class ApiBase {
 	 * @param $extradata array Data to add to the <error> element; array in ApiResult format
 	 */
 	public function dieUsage( $description, $errorCode, $httpRespCode = 0, $extradata = null ) {
-		wfProfileClose();
 		throw new UsageException( $description, $this->encodeParamName( $errorCode ), $httpRespCode, $extradata );
 	}
 
@@ -958,139 +957,7 @@ abstract class ApiBase {
 		'unknownerror' => array( 'code' => 'unknownerror', 'info' => "Unknown error: ``\$1''" ),
 		'unknownerror-nocode' => array( 'code' => 'unknownerror', 'info' => 'Unknown error' ),
 
-		// Messages from Title::getUserPermissionsErrors()
-		'ns-specialprotected' => array( 'code' => 'unsupportednamespace', 'info' => "Pages in the Special namespace can't be edited" ),
-		'protectedinterface' => array( 'code' => 'protectednamespace-interface', 'info' => "You're not allowed to edit interface messages" ),
-		'namespaceprotected' => array( 'code' => 'protectednamespace', 'info' => "You're not allowed to edit pages in the ``\$1'' namespace" ),
-		'customcssjsprotected' => array( 'code' => 'customcssjsprotected', 'info' => "You're not allowed to edit custom CSS and JavaScript pages" ),
-		'cascadeprotected' => array( 'code' => 'cascadeprotected', 'info' => "The page you're trying to edit is protected because it's included in a cascade-protected page" ),
-		'protectedpagetext' => array( 'code' => 'protectedpage', 'info' => "The ``\$1'' right is required to edit this page" ),
-		'protect-cantedit' => array( 'code' => 'cantedit', 'info' => "You can't protect this page because you can't edit it" ),
-		'badaccess-group0' => array( 'code' => 'permissiondenied', 'info' => "Permission denied" ), // Generic permission denied message
-		'badaccess-groups' => array( 'code' => 'permissiondenied', 'info' => "Permission denied" ),
-		'titleprotected' => array( 'code' => 'protectedtitle', 'info' => "This title has been protected from creation" ),
-		'nocreate-loggedin' => array( 'code' => 'cantcreate', 'info' => "You don't have permission to create new pages" ),
-		'nocreatetext' => array( 'code' => 'cantcreate-anon', 'info' => "Anonymous users can't create new pages" ),
-		'movenologintext' => array( 'code' => 'cantmove-anon', 'info' => "Anonymous users can't move pages" ),
-		'movenotallowed' => array( 'code' => 'cantmove', 'info' => "You don't have permission to move pages" ),
-		'confirmedittext' => array( 'code' => 'confirmemail', 'info' => "You must confirm your e-mail address before you can edit" ),
-		'blockedtext' => array( 'code' => 'blocked', 'info' => "You have been blocked from editing" ),
-		'autoblockedtext' => array( 'code' => 'autoblocked', 'info' => "Your IP address has been blocked automatically, because it was used by a blocked user" ),
-
-		// Miscellaneous interface messages
-		'actionthrottledtext' => array( 'code' => 'ratelimited', 'info' => "You've exceeded your rate limit. Please wait some time and try again" ),
-		'alreadyrolled' => array( 'code' => 'alreadyrolled', 'info' => "The page you tried to rollback was already rolled back" ),
-		'cantrollback' => array( 'code' => 'onlyauthor', 'info' => "The page you tried to rollback only has one author" ),
-		'readonlytext' => array( 'code' => 'readonly', 'info' => "The wiki is currently in read-only mode" ),
-		'sessionfailure' => array( 'code' => 'badtoken', 'info' => "Invalid token" ),
-		'cannotdelete' => array( 'code' => 'cantdelete', 'info' => "Couldn't delete ``\$1''. Maybe it was deleted already by someone else" ),
-		'notanarticle' => array( 'code' => 'missingtitle', 'info' => "The page you requested doesn't exist" ),
-		'selfmove' => array( 'code' => 'selfmove', 'info' => "Can't move a page to itself" ),
-		'immobile_namespace' => array( 'code' => 'immobilenamespace', 'info' => "You tried to move pages from or to a namespace that is protected from moving" ),
-		'articleexists' => array( 'code' => 'articleexists', 'info' => "The destination article already exists and is not a redirect to the source article" ),
-		'protectedpage' => array( 'code' => 'protectedpage', 'info' => "You don't have permission to perform this move" ),
-		'hookaborted' => array( 'code' => 'hookaborted', 'info' => "The modification you tried to make was aborted by an extension hook" ),
-		'cantmove-titleprotected' => array( 'code' => 'protectedtitle', 'info' => "The destination article has been protected from creation" ),
-		'imagenocrossnamespace' => array( 'code' => 'nonfilenamespace', 'info' => "Can't move a file to a non-file namespace" ),
-		'imagetypemismatch' => array( 'code' => 'filetypemismatch', 'info' => "The new file extension doesn't match its type" ),
-		// 'badarticleerror' => shouldn't happen
-		// 'badtitletext' => shouldn't happen
-		'ip_range_invalid' => array( 'code' => 'invalidrange', 'info' => "Invalid IP range" ),
-		'range_block_disabled' => array( 'code' => 'rangedisabled', 'info' => "Blocking IP ranges has been disabled" ),
-		'nosuchusershort' => array( 'code' => 'nosuchuser', 'info' => "The user you specified doesn't exist" ),
-		'badipaddress' => array( 'code' => 'invalidip', 'info' => "Invalid IP address specified" ),
-		'ipb_expiry_invalid' => array( 'code' => 'invalidexpiry', 'info' => "Invalid expiry time" ),
-		'ipb_already_blocked' => array( 'code' => 'alreadyblocked', 'info' => "The user you tried to block was already blocked" ),
-		'ipb_blocked_as_range' => array( 'code' => 'blockedasrange', 'info' => "IP address ``\$1'' was blocked as part of range ``\$2''. You can't unblock the IP invidually, but you can unblock the range as a whole." ),
-		'ipb_cant_unblock' => array( 'code' => 'cantunblock', 'info' => "The block you specified was not found. It may have been unblocked already" ),
-		'mailnologin' => array( 'code' => 'cantsend', 'info' => "You are not logged in, you do not have a confirmed e-mail address, or you are not allowed to send e-mail to other users, so you cannot send e-mail" ),
-		'ipbblocked' => array( 'code' => 'ipbblocked', 'info' => 'You cannot block or unblock users while you are yourself blocked' ),
-		'ipbnounblockself' => array( 'code' => 'ipbnounblockself', 'info' => 'You are not allowed to unblock yourself' ),
-		'usermaildisabled' => array( 'code' => 'usermaildisabled', 'info' => "User email has been disabled" ),
-		'blockedemailuser' => array( 'code' => 'blockedfrommail', 'info' => "You have been blocked from sending e-mail" ),
-		'notarget' => array( 'code' => 'notarget', 'info' => "You have not specified a valid target for this action" ),
-		'noemail' => array( 'code' => 'noemail', 'info' => "The user has not specified a valid e-mail address, or has chosen not to receive e-mail from other users" ),
-		'rcpatroldisabled' => array( 'code' => 'patroldisabled', 'info' => "Patrolling is disabled on this wiki" ),
-		'markedaspatrollederror-noautopatrol' => array( 'code' => 'noautopatrol', 'info' => "You don't have permission to patrol your own changes" ),
-		'delete-toobig' => array( 'code' => 'bigdelete', 'info' => "You can't delete this page because it has more than \$1 revisions" ),
-		'movenotallowedfile' => array( 'code' => 'cantmovefile', 'info' => "You don't have permission to move files" ),
-		'userrights-no-interwiki' => array( 'code' => 'nointerwikiuserrights', 'info' => "You don't have permission to change user rights on other wikis" ),
-		'userrights-nodatabase' => array( 'code' => 'nosuchdatabase', 'info' => "Database ``\$1'' does not exist or is not local" ),
-		'nouserspecified' => array( 'code' => 'invaliduser', 'info' => "Invalid username ``\$1''" ),
-		'noname' => array( 'code' => 'invaliduser', 'info' => "Invalid username ``\$1''" ),
-		'summaryrequired' => array( 'code' => 'summaryrequired', 'info' => 'Summary required' ),
-
-		// API-specific messages
-		'readrequired' => array( 'code' => 'readapidenied', 'info' => "You need read permission to use this module" ),
-		'writedisabled' => array( 'code' => 'noapiwrite', 'info' => "Editing of this wiki through the API is disabled. Make sure the \$wgEnableWriteAPI=true; statement is included in the wiki's LocalSettings.php file" ),
-		'writerequired' => array( 'code' => 'writeapidenied', 'info' => "You're not allowed to edit this wiki through the API" ),
 		'missingparam' => array( 'code' => 'no$1', 'info' => "The \$1 parameter must be set" ),
-		'invalidtitle' => array( 'code' => 'invalidtitle', 'info' => "Bad title ``\$1''" ),
-		'nosuchpageid' => array( 'code' => 'nosuchpageid', 'info' => "There is no page with ID \$1" ),
-		'nosuchrevid' => array( 'code' => 'nosuchrevid', 'info' => "There is no revision with ID \$1" ),
-		'nosuchuser' => array( 'code' => 'nosuchuser', 'info' => "User ``\$1'' doesn't exist" ),
-		'invaliduser' => array( 'code' => 'invaliduser', 'info' => "Invalid username ``\$1''" ),
-		'invalidexpiry' => array( 'code' => 'invalidexpiry', 'info' => "Invalid expiry time ``\$1''" ),
-		'pastexpiry' => array( 'code' => 'pastexpiry', 'info' => "Expiry time ``\$1'' is in the past" ),
-		'create-titleexists' => array( 'code' => 'create-titleexists', 'info' => "Existing titles can't be protected with 'create'" ),
-		'missingtitle-createonly' => array( 'code' => 'missingtitle-createonly', 'info' => "Missing titles can only be protected with 'create'" ),
-		'cantblock' => array( 'code' => 'cantblock', 'info' => "You don't have permission to block users" ),
-		'canthide' => array( 'code' => 'canthide', 'info' => "You don't have permission to hide user names from the block log" ),
-		'cantblock-email' => array( 'code' => 'cantblock-email', 'info' => "You don't have permission to block users from sending e-mail through the wiki" ),
-		'unblock-notarget' => array( 'code' => 'notarget', 'info' => "Either the id or the user parameter must be set" ),
-		'unblock-idanduser' => array( 'code' => 'idanduser', 'info' => "The id and user parameters can't be used together" ),
-		'cantunblock' => array( 'code' => 'permissiondenied', 'info' => "You don't have permission to unblock users" ),
-		'cannotundelete' => array( 'code' => 'cantundelete', 'info' => "Couldn't undelete: the requested revisions may not exist, or may have been undeleted already" ),
-		'permdenied-undelete' => array( 'code' => 'permissiondenied', 'info' => "You don't have permission to restore deleted revisions" ),
-		'createonly-exists' => array( 'code' => 'articleexists', 'info' => "The article you tried to create has been created already" ),
-		'nocreate-missing' => array( 'code' => 'missingtitle', 'info' => "The article you tried to edit doesn't exist" ),
-		'nosuchrcid' => array( 'code' => 'nosuchrcid', 'info' => "There is no change with rcid ``\$1''" ),
-		'protect-invalidaction' => array( 'code' => 'protect-invalidaction', 'info' => "Invalid protection type ``\$1''" ),
-		'protect-invalidlevel' => array( 'code' => 'protect-invalidlevel', 'info' => "Invalid protection level ``\$1''" ),
-		'toofewexpiries' => array( 'code' => 'toofewexpiries', 'info' => "\$1 expiry timestamps were provided where \$2 were needed" ),
-		'cantimport' => array( 'code' => 'cantimport', 'info' => "You don't have permission to import pages" ),
-		'cantimport-upload' => array( 'code' => 'cantimport-upload', 'info' => "You don't have permission to import uploaded pages" ),
-		'nouploadmodule' => array( 'code' => 'nomodule', 'info' => 'No upload module set' ),
-		'importnofile' => array( 'code' => 'nofile', 'info' => "You didn't upload a file" ),
-		'importuploaderrorsize' => array( 'code' => 'filetoobig', 'info' => 'The file you uploaded is bigger than the maximum upload size' ),
-		'importuploaderrorpartial' => array( 'code' => 'partialupload', 'info' => 'The file was only partially uploaded' ),
-		'importuploaderrortemp' => array( 'code' => 'notempdir', 'info' => 'The temporary upload directory is missing' ),
-		'importcantopen' => array( 'code' => 'cantopenfile', 'info' => "Couldn't open the uploaded file" ),
-		'import-noarticle' => array( 'code' => 'badinterwiki', 'info' => 'Invalid interwiki title specified' ),
-		'importbadinterwiki' => array( 'code' => 'badinterwiki', 'info' => 'Invalid interwiki title specified' ),
-		'import-unknownerror' => array( 'code' => 'import-unknownerror', 'info' => "Unknown error on import: ``\$1''" ),
-		'cantoverwrite-sharedfile' => array( 'code' => 'cantoverwrite-sharedfile', 'info' => 'The target file exists on a shared repository and you do not have permission to override it' ),
-		'sharedfile-exists' => array( 'code' => 'fileexists-sharedrepo-perm', 'info' => 'The target file exists on a shared repository. Use the ignorewarnings parameter to override it.' ),
-		'mustbeposted' => array( 'code' => 'mustbeposted', 'info' => "The \$1 module requires a POST request" ),
-		'show' => array( 'code' => 'show', 'info' => 'Incorrect parameter - mutually exclusive values may not be supplied' ),
-		'specialpage-cantexecute' => array( 'code' => 'specialpage-cantexecute', 'info' => "You don't have permission to view the results of this special page" ),
-
-		// ApiEditPage messages
-		'noimageredirect-anon' => array( 'code' => 'noimageredirect-anon', 'info' => "Anonymous users can't create image redirects" ),
-		'noimageredirect-logged' => array( 'code' => 'noimageredirect', 'info' => "You don't have permission to create image redirects" ),
-		'spamdetected' => array( 'code' => 'spamdetected', 'info' => "Your edit was refused because it contained a spam fragment: ``\$1''" ),
-		'filtered' => array( 'code' => 'filtered', 'info' => "The filter callback function refused your edit" ),
-		'contenttoobig' => array( 'code' => 'contenttoobig', 'info' => "The content you supplied exceeds the article size limit of \$1 kilobytes" ),
-		'noedit-anon' => array( 'code' => 'noedit-anon', 'info' => "Anonymous users can't edit pages" ),
-		'noedit' => array( 'code' => 'noedit', 'info' => "You don't have permission to edit pages" ),
-		'wasdeleted' => array( 'code' => 'pagedeleted', 'info' => "The page has been deleted since you fetched its timestamp" ),
-		'blankpage' => array( 'code' => 'emptypage', 'info' => "Creating new, empty pages is not allowed" ),
-		'editconflict' => array( 'code' => 'editconflict', 'info' => "Edit conflict detected" ),
-		'hashcheckfailed' => array( 'code' => 'badmd5', 'info' => "The supplied MD5 hash was incorrect" ),
-		'missingtext' => array( 'code' => 'notext', 'info' => "One of the text, appendtext, prependtext and undo parameters must be set" ),
-		'emptynewsection' => array( 'code' => 'emptynewsection', 'info' => 'Creating empty new sections is not possible.' ),
-		'revwrongpage' => array( 'code' => 'revwrongpage', 'info' => "r\$1 is not a revision of ``\$2''" ),
-		'undo-failure' => array( 'code' => 'undofailure', 'info' => 'Undo failed due to conflicting intermediate edits' ),
-
-		// uploadMsgs
-		'invalid-session-key' => array( 'code' => 'invalid-session-key', 'info' => 'Not a valid session key' ),
-		'nouploadmodule' => array( 'code' => 'nouploadmodule', 'info' => 'No upload module set' ),
-		'uploaddisabled' => array( 'code' => 'uploaddisabled', 'info' => 'Uploads are not enabled.  Make sure $wgEnableUploads is set to true in LocalSettings.php and the PHP ini setting file_uploads is true' ),
-		'copyuploaddisabled' => array( 'code' => 'copyuploaddisabled', 'info' => 'Uploads by URL is not enabled.  Make sure $wgAllowCopyUploads is set to true in LocalSettings.php.' ),
-		
-		'filename-tooshort' => array( 'code' => 'filename-tooshort', 'info' => 'The filename is too short' ),
-		'illegal-filename' => array( 'code' => 'illegal-filename', 'info' => 'The filename is not allowed' ),
-		'filetype-missing' => array( 'code' => 'filetype-missing', 'info' => 'The file is missing an extension' ),
 	);
 
 	/**
@@ -1278,7 +1145,6 @@ abstract class ApiBase {
 			ApiBase::dieDebug( __METHOD__, 'called twice without calling profileOut()' );
 		}
 		$this->mTimeIn = microtime( true );
-		wfProfileIn( $this->getModuleProfileName() );
 	}
 
 	/**
@@ -1294,7 +1160,6 @@ abstract class ApiBase {
 
 		$this->mModuleTime += microtime( true ) - $this->mTimeIn;
 		$this->mTimeIn = 0;
-		wfProfileOut( $this->getModuleProfileName() );
 	}
 
 	/**
@@ -1337,7 +1202,6 @@ abstract class ApiBase {
 			ApiBase::dieDebug( __METHOD__, 'called twice without calling profileDBOut()' );
 		}
 		$this->mDBTimeIn = microtime( true );
-		wfProfileIn( $this->getModuleProfileName( true ) );
 	}
 
 	/**
@@ -1356,7 +1220,6 @@ abstract class ApiBase {
 
 		$this->mDBTime += $time;
 		$this->getMain()->mDBTime += $time;
-		wfProfileOut( $this->getModuleProfileName( true ) );
 	}
 
 	/**

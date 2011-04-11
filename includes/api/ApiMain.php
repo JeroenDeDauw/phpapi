@@ -54,34 +54,8 @@ class ApiMain extends ApiBase {
 	 * List of available modules: action name => module class
 	 */
 	private static $Modules = array(
-		'login' => 'ApiLogin',
-		'logout' => 'ApiLogout',
-		'query' => 'ApiQuery',
-		'expandtemplates' => 'ApiExpandTemplates',
-		'parse' => 'ApiParse',
-		'opensearch' => 'ApiOpenSearch',
-		'feedwatchlist' => 'ApiFeedWatchlist',
-		'help' => 'ApiHelp',
-		'paraminfo' => 'ApiParamInfo',
-		'rsd' => 'ApiRsd',
-
-		// Write modules
-		'purge' => 'ApiPurge',
-		'rollback' => 'ApiRollback',
-		'delete' => 'ApiDelete',
-		'undelete' => 'ApiUndelete',
-		'protect' => 'ApiProtect',
-		'block' => 'ApiBlock',
-		'unblock' => 'ApiUnblock',
-		'move' => 'ApiMove',
-		'edit' => 'ApiEditPage',
-		'upload' => 'ApiUpload',
-		'filerevert' => 'ApiFileRevert',
-		'emailuser' => 'ApiEmailUser',
-		'watch' => 'ApiWatch',
-		'patrol' => 'ApiPatrol',
-		'import' => 'ApiImport',
-		'userrights' => 'ApiUserrights',
+		'test' => 'ApiTest',
+		'querytest' => 'ApiQueryTest'
 	);
 
 	/**
@@ -162,8 +136,8 @@ class ApiMain extends ApiBase {
 			}
 		}
 
-		global $wgAPIModules; // extension modules
-		$this->mModules = $wgAPIModules + self::$Modules;
+		global $globAPIModules; // extension modules
+		$this->mModules = $globAPIModules + self::$Modules;
 
 		$this->mModuleNames = array_keys( $this->mModules );
 		$this->mFormats = self::$Formats;
@@ -664,7 +638,7 @@ class ApiMain extends ApiBase {
 		// Execute
 		$module->profileIn();
 		$module->execute();
-		wfRunHooks( 'APIAfterExecute', array( &$module ) );
+		apiRunHooks( 'APIAfterExecute', array( &$module ) );
 		$module->profileOut();
 
 		if ( !$this->mInternalMode ) {

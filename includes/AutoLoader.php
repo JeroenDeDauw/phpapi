@@ -15,12 +15,14 @@ global $globAutoloadLocalClasses, $globAutoloadClasses;
 $globAutoloadLocalClasses = array(
 	# Includes
 	'WebRequest' => 'includes/WebRequest.php',
+	'FauxRequest' => 'includes/WebRequest.php',
 
 	# API base
 	'ApiBase' => 'includes/api/ApiBase.php',
 	'ApiFormatBase' => 'includes/api/ApiFormatBase.php',
 	'ApiHelp' => 'includes/api/ApiHelp.php',
 	'ApiMain' => 'includes/api/ApiMain.php',
+	'ApiResult' => 'includes/api/ApiResult.php',
 
 	# API formats
 	'ApiFormatBase' => 'includes/api/formats/ApiFormatBase.php',
@@ -57,8 +59,8 @@ class AutoLoader {
 
 		# Make an absolute path, this improves performance by avoiding some stat calls
 		if ( substr( $filename, 0, 1 ) != '/' && substr( $filename, 1, 1 ) != ':' ) {
-			global $IP;
-			$filename = "$IP/$filename";
+			global $apiDir;
+			$filename = "$apiDir/$filename";
 		}
 
 		require( $filename );

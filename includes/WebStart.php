@@ -37,7 +37,7 @@ if ( ini_get( 'register_globals' ) ) {
 define( 'PHP_API', true );
 
 # Start the autoloader, so that extensions can derive classes from core files
-require_once( 'includes/AutoLoader.php' );
+require_once( 'AutoLoader.php' );
 
 # Initialise output buffering
 # Check that there is no previous output or previously set up buffers, because
@@ -45,7 +45,7 @@ require_once( 'includes/AutoLoader.php' );
 # big mess.
 if ( ob_get_level() == 0 ) {
 	if ( !defined( 'MW_COMPILED' ) ) {
-		require_once( "$IP/includes/OutputHandler.php" );
+		require_once( 'OutputHandler.php' );
 	}
 	ob_start( 'wfOutputHandler' );
 }
