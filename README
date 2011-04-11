@@ -1,0 +1,8 @@
+== Idea ==
+
+Creating an API base written in PHP that can be used out of the box by projects that want
+to provide a PHP-based API without reinventing the wheel. I'm quite familiar with the MediaWiki
+API, which I think is quite well designed, and can probably be forked pretty easily to a
+stand-alone base API not dependent on any other MediaWiki code. This API is possibly the
+most used open source PHP-based API there is (as it's on Wikipedia and every other MediaWiki
+wiki), and if not, definitely one of the most used ones.
