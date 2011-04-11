@@ -16,16 +16,17 @@ $globAutoloadLocalClasses = array(
 	# Includes
 	'WebRequest' => 'includes/WebRequest.php',
 	'FauxRequest' => 'includes/WebRequest.php',
+	'Hooks' => 'includes/Hooks.php',
 
 	# API base
 	'ApiBase' => 'includes/api/ApiBase.php',
 	'ApiFormatBase' => 'includes/api/ApiFormatBase.php',
 	'ApiHelp' => 'includes/api/ApiHelp.php',
 	'ApiMain' => 'includes/api/ApiMain.php',
+	'ApiQueryBase' => 'includes/api/ApiQueryBase.php',
 	'ApiResult' => 'includes/api/ApiResult.php',
 
 	# API formats
-	'ApiFormatBase' => 'includes/api/formats/ApiFormatBase.php',
 	'ApiFormatDbg' => 'includes/api/formats/ApiFormatDbg.php',
 	'ApiFormatDump' => 'includes/api/formats/ApiFormatDump.php',
 	'ApiFormatJson' => 'includes/api/formats/ApiFormatJson.php',
@@ -35,6 +36,10 @@ $globAutoloadLocalClasses = array(
 	'ApiFormatWddx' => 'includes/api/formats/ApiFormatWddx.php',
 	'ApiFormatXml' => 'includes/api/formats/ApiFormatXml.php',
 	'ApiFormatYaml' => 'includes/api/formats/ApiFormatYaml.php',
+
+	# API modules
+	'ApiTest' => 'includes/api/modules/ApiTest.php',
+	'ApiQueryTest' => 'includes/api/modules/ApiQueryTest.php',
 );
 
 class AutoLoader {

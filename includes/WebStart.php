@@ -51,3 +51,5 @@ if ( ob_get_level() == 0 ) {
 }
 
 $wgRequest = new WebRequest;
+
+require_once( 'Hooks.php' );

@@ -58,6 +58,7 @@ require ( $apiDir . '/includes/WebStart.php' );
 // XSS injection and all that entails.
 //
 if ( $wgRequest->isPathInfoBad() ) {
+	// TODO
 	wfHttpError( 403, 'Forbidden',
 		'Invalid file extension found in PATH_INFO. ' .
 		'The API must be accessed through the primary script entry point.' );

@@ -25,11 +25,6 @@
  * @defgroup API API
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiBase.php' );
-}
-
 /**
  * This is the main API class, used for both external and internal processing.
  * When executed, it will create the requested formatter object,
@@ -207,59 +202,6 @@ class ApiMain extends ApiBase {
 	}
 
 	/**
-	 * Set the type of caching headers which will be sent.
-	 *
-	 * @param $mode String One of:
-	 *    - 'public':     Cache this object in public caches, if the maxage or smaxage
-	 *         parameter is set, or if setCacheMaxAge() was called. If a maximum age is
-	 *         not provided by any of these means, the object will be private.
-	 *    - 'private':    Cache this object only in private client-side caches.
-	 *    - 'anon-public-user-private': Make this object cacheable for logged-out
-	 *         users, but private for logged-in users. IMPORTANT: If this is set, it must be
-	 *         set consistently for a given URL, it cannot be set differently depending on
-	 *         things like the contents of the database, or whether the user is logged in.
-	 *
-	 *  If the wiki does not allow anonymous users to read it, the mode set here
-	 *  will be ignored, and private caching headers will always be sent. In other words,
-	 *  the "public" mode is equivalent to saying that the data sent is as public as a page
-	 *  view.
-	 *
-	 *  For user-dependent data, the private mode should generally be used. The
-	 *  anon-public-user-private mode should only be used where there is a particularly
-	 *  good performance reason for caching the anonymous response, but where the
-	 *  response to logged-in users may differ, or may contain private data.
-	 *
-	 *  If this function is never called, then the default will be the private mode.
-	 */
-	public function setCacheMode( $mode ) {
-		if ( !in_array( $mode, array( 'private', 'public', 'anon-public-user-private' ) ) ) {
-			wfDebug( __METHOD__ . ": unrecognised cache mode \"$mode\"\n" );
-			// Ignore for forwards-compatibility
-			return;
-		}
-
-		if ( !in_array( 'read', User::getGroupPermissions( array( '*' ) ), true ) ) {
-			// Private wiki, only private headers
-			if ( $mode !== 'private' ) {
-				wfDebug( __METHOD__ . ": ignoring request for $mode cache mode, private wiki\n" );
-				return;
-			}
-		}
-
-		wfDebug( __METHOD__ . ": setting cache mode $mode\n" );
-		$this->mCacheMode = $mode;
-	}
-
-	/**
-	 * @deprecated Private caching is now the default, so there is usually no
-	 * need to call this function. If there is a need, you can use
-	 * $this->setCacheMode('private')
-	 */
-	public function setCachePrivate() {
-		$this->setCacheMode( 'private' );
-	}
-
-	/**
 	 * Set directives (key/value pairs) for the Cache-Control header.
 	 * Boolean values will be formatted as such, by including or omitting
 	 * without an equals sign.
@@ -269,20 +211,6 @@ class ApiMain extends ApiBase {
 	 */
 	public function setCacheControl( $directives ) {
 		$this->mCacheControl = $directives + $this->mCacheControl;
-	}
-
-	/**
-	 * Make sure Vary: Cookie and friends are set. Use this when the output of a request
-	 * may be cached for anons but may not be cached for logged-in users.
-	 *
-	 * WARNING: This function must be called CONSISTENTLY for a given URL. This means that a
-	 * given URL must either always or never call this function; if it sometimes does and
-	 * sometimes doesn't, stuff will break.
-	 *
-	 * @deprecated Use setCacheMode( 'anon-public-user-private' )
-	 */
-	public function setVaryCookie() {
-		$this->setCacheMode( 'anon-public-user-private' );
 	}
 
 	/**
@@ -335,9 +263,6 @@ class ApiMain extends ApiBase {
 			//
 
 			$errCode = $this->substituteResultWithError( $e );
-
-			// Error results should not be cached
-			$this->setCacheMode( 'private' );
 
 			$headerStr = 'MediaWiki-API-Error: ' . $errCode;
 			if ( $e->getCode() === 0 ) {
@@ -485,7 +410,7 @@ class ApiMain extends ApiBase {
 			$this->getResult()->addValue( null, 'requestid', $requestid );
 		}
 		// servedby is especially useful when debugging errors
-		$this->getResult()->addValue( null, 'servedby', wfHostName() );
+		//$this->getResult()->addValue( null, 'servedby', wfHostName() );
 		$this->getResult()->addValue( null, 'error', $errMessage );
 
 		return $errMessage['code'];
@@ -792,23 +717,8 @@ class ApiMain extends ApiBase {
 	 * Override the parent to generate help messages for all available modules.
 	 */
 	public function makeHelpMsg() {
-		global $wgMemc, $wgAPICacheHelpTimeout;
 		$this->setHelp();
-		// Get help text from cache if present
-		$key = wfMemcKey( 'apihelp', $this->getModuleName(),
-			SpecialVersion::getVersion( 'nodb' ) .
-			$this->getMain()->getShowVersions() );
-		if ( $wgAPICacheHelpTimeout > 0 ) {
-			$cached = $wgMemc->get( $key );
-			if ( $cached ) {
-				return $cached;
-			}
-		}
-		$retval = $this->reallyMakeHelpMsg();
-		if ( $wgAPICacheHelpTimeout > 0 ) {
-			$wgMemc->set( $key, $retval, $wgAPICacheHelpTimeout );
-		}
-		return $retval;
+		return $this->reallyMakeHelpMsg();
 	}
 
 	public function reallyMakeHelpMsg() {
@@ -827,14 +737,6 @@ class ApiMain extends ApiBase {
 				$msg .= $msg2;
 			}
 			$msg .= "\n";
-		}
-
-		$msg .= "\n$astriks Permissions $astriks\n\n";
-		foreach ( self::$mRights as $right => $rightMsg ) {
-			$groups = User::getGroupsWithPermission( $right );
-			$msg .= "* " . $right . " *\n  " . wfMsgReplaceArgs( $rightMsg[ 'msg' ], $rightMsg[ 'params' ] ) .
-						"\nGranted to:\n  " . str_replace( '*', 'all', implode( ', ', $groups ) ) . "\n\n";
-
 		}
 
 		$msg .= "\n$astriks Formats  $astriks\n\n";

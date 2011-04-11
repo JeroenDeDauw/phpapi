@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiBase.php' );
-}
-
 /**
  * This is the abstract base class for API formatters.
  *
@@ -138,7 +133,7 @@ abstract class ApiFormatBase extends ApiBase {
 		}
 		$isHtml = $this->getIsHtml();
 		$mime = $isHtml ? 'text/html' : $this->getMimeType();
-		$script = wfScript( 'api' );
+		$script = '';//wfScript( 'api' ); TODO
 
 		// Some printers (ex. Feed) do their own header settings,
 		// in which case $mime will be set to null

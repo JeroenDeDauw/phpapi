@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiBase.php' );
-}
-
 /**
  * This class represents the result of the API operations.
  * It simply wraps a nested array() structure, adding some functions to simplify array's modifications.
@@ -335,11 +330,8 @@ class ApiResult extends ApiBase {
 		if ( !is_string( $s ) ) {
 			return;
 		}
-		global $wgContLang;
-		$s = $wgContLang->normalize( $s );
 	}
 	
-
 	/**
 	 * Converts a Status object to an array suitable for addValue
 	 * @param Status $status
