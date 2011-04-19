@@ -284,7 +284,8 @@ class ApiMain extends ApiBase {
 		$this->sendCacheHeaders();
 
 		if ( $this->mPrinter->getIsHtml() && !$this->mPrinter->isDisabled() ) {
-			echo wfReportTime();
+			global $globRequestTime;
+			echo sprintf( '<!-- Served in %01.3f secs. -->', microtime( true ) - $globRequestTime );
 		}
 
 		ob_end_flush();

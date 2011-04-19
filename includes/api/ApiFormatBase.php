@@ -254,7 +254,21 @@ See <a href='http://www.mediawiki.org/wiki/API'>complete documentation</a>, or
 	 * @return string
 	 */
 	protected function formatHTML( $text ) {
-		global $wgUrlProtocols;
+		$wgUrlProtocols = array(
+			'http://',
+			'https://',
+			'ftp://',
+			'irc://',
+			'gopher://',
+			'telnet://', // Well if we're going to support the above.. -ævar
+			'nntp://', // @bug 3808 RFC 1738
+			'worldwind://',
+			'mailto:',
+			'news:',
+			'svn://',
+			'git://',
+			'mms://',
+		);
 
 		// Escape everything first for full coverage
 		$text = htmlspecialchars( $text );

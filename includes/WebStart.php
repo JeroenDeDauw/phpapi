@@ -36,6 +36,8 @@ if ( ini_get( 'register_globals' ) ) {
 
 define( 'PHP_API', true );
 
+$globRequestTime = microtime( true );
+
 # Start the autoloader, so that extensions can derive classes from core files
 require_once( 'AutoLoader.php' );
 
@@ -44,9 +46,7 @@ require_once( 'AutoLoader.php' );
 # that would cause us to potentially mix gzip and non-gzip output, creating a
 # big mess.
 if ( ob_get_level() == 0 ) {
-	if ( !defined( 'MW_COMPILED' ) ) {
-		require_once( 'OutputHandler.php' );
-	}
+    require_once( 'OutputHandler.php' );
 	ob_start( 'wfOutputHandler' );
 }
 

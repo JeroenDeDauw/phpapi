@@ -14,9 +14,11 @@ global $globAutoloadLocalClasses, $globAutoloadClasses;
 
 $globAutoloadLocalClasses = array(
 	# Includes
+	'Sanitizer' => 'includes/Sanitizer.php',
 	'WebRequest' => 'includes/WebRequest.php',
 	'FauxRequest' => 'includes/WebRequest.php',
 	'Hooks' => 'includes/Hooks.php',
+	'Xml' => 'includes/Xml.php',
 
 	# API base
 	'ApiBase' => 'includes/api/ApiBase.php',
