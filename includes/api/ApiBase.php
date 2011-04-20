@@ -958,6 +958,7 @@ abstract class ApiBase {
 		'unknownerror-nocode' => array( 'code' => 'unknownerror', 'info' => 'Unknown error' ),
 
 		'missingparam' => array( 'code' => 'no$1', 'info' => "The \$1 parameter must be set" ),
+		'notanint' => array( 'code' => 'notanint', 'info' => "The \$1 parameter must be an integer" ),
 	);
 
 	/**
@@ -979,6 +980,34 @@ abstract class ApiBase {
 	}
 
 	/**
+	 * Replace message parameter keys on the given formatted output.
+	 *
+	 * @param $message String
+	 * @param $args Array
+	 * 
+	 * @return string
+	 */
+	protected function msgReplaceArgs( $message, $args ) {
+		# Fix windows line-endings
+		# Some messages are split with explode("\n", $msg)
+		$message = str_replace( "\r", '', $message );
+	
+		// Replace arguments
+		if ( count( $args ) ) {
+			if ( is_array( $args[0] ) ) {
+				$args = array_values( $args[0] );
+			}
+			$replacementKeys = array();
+			foreach( $args as $n => $param ) {
+				$replacementKeys['$' . ( $n + 1 )] = $param;
+			}
+			$message = strtr( $message, $replacementKeys );
+		}
+	
+		return $message;
+	}	
+	
+	/**
 	 * Return the error message related to a certain array
 	 * @param $error array Element of a getUserPermissionsErrors()-style array
 	 * @return array('code' => code, 'info' => info)
@@ -987,9 +1016,9 @@ abstract class ApiBase {
 		$key = array_shift( $error );
 		if ( isset( self::$messageMap[$key] ) ) {
 			return array( 'code' =>
-				wfMsgReplaceArgs( self::$messageMap[$key]['code'], $error ),
+				$this->msgReplaceArgs( self::$messageMap[$key]['code'], $error ),
 					'info' =>
-				wfMsgReplaceArgs( self::$messageMap[$key]['info'], $error )
+				$this->msgReplaceArgs( self::$messageMap[$key]['info'], $error )
 			);
 		}
 		// If the key isn't present, throw an "unknown error"
@@ -1002,7 +1031,7 @@ abstract class ApiBase {
 	 * @param $message string Error message
 	 */
 	protected static function dieDebug( $method, $message ) {
-		wfDebugDieBacktrace( "Internal error in $method: $message" );
+		throw new Exception( "Internal error in $method: $message" );
 	}
 
 	/**
