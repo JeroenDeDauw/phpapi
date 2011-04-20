@@ -151,9 +151,9 @@ abstract class ApiFormatBase extends ApiBase {
 <html>
 <head>
 <?php if ( $this->mUnescapeAmps ) {
-?>	<title>MediaWiki API</title>
+?>	<title>PHPAPI</title>
 <?php } else {
-?>	<title>MediaWiki API Result</title>
+?>	<title>PHPAPI Result</title>
 <?php } ?>
 </head>
 <body>

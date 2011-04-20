@@ -1,8 +1,10 @@
-== Idea ==
+== About ==
 
-Creating an API base written in PHP that can be used out of the box by projects that want
-to provide a PHP-based API without reinventing the wheel. I'm quite familiar with the MediaWiki
-API, which I think is quite well designed, and can probably be forked pretty easily to a
-stand-alone base API not dependent on any other MediaWiki code. This API is possibly the
-most used open source PHP-based API there is (as it's on Wikipedia and every other MediaWiki
-wiki), and if not, definitely one of the most used ones.
+phpapi is a stand-alone fork of the MediaWiki API designed to be directly usable by
+PHP projects in need of an API. It removes the need to reinvent the wheel by writing
+basis API code, so you can get right to implementing the actual functionality you
+care about. The API is also quite extendable and has been proven to work.
+
+== Status of the API ==
+
+Currently the API is in alpha; do not use for production usage.

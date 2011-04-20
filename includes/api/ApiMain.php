@@ -50,7 +50,6 @@ class ApiMain extends ApiBase {
 	 */
 	private static $Modules = array(
 		'test' => 'ApiTest',
-		'querytest' => 'ApiQueryTest'
 	);
 
 	/**
@@ -658,10 +657,10 @@ class ApiMain extends ApiBase {
 			'',
 			'**********************************************************************************************************',
 			'**                                                                                                      **',
-			'**                      This is an auto-generated MediaWiki API documentation page                      **',
+			'**                           This is an auto-generated API documentation page                           **',
 			'**                                                                                                      **',
 			'**                                    Documentation and Examples:                                       **',
-			'**                                 http://www.mediawiki.org/wiki/API                                    **',
+			'**                               https://github.com/JeroenDeDauw/phpapi                                 **',
 			'**                                                                                                      **',
 			'**********************************************************************************************************',
 			'',
@@ -669,10 +668,7 @@ class ApiMain extends ApiBase {
 			'                       is still in active development, and  may change at any time.',
 			'                       Make sure to monitor our mailing list for any updates',
 			'',
-			'Documentation:         http://www.mediawiki.org/wiki/API',
-			'Mailing list:          http://lists.wikimedia.org/mailman/listinfo/mediawiki-api',
-			'Api Announcements:     http://lists.wikimedia.org/mailman/listinfo/mediawiki-api-announce',
-			'Bugs & Requests:       http://bugzilla.wikimedia.org/buglist.cgi?component=API&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=bugs.delta_ts',
+			'Documentation:         https://github.com/JeroenDeDauw/phpapi',
 			'',
 			'',
 			'',

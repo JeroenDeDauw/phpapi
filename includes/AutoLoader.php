@@ -25,7 +25,6 @@ $globAutoloadLocalClasses = array(
 	'ApiFormatBase' => 'includes/api/ApiFormatBase.php',
 	'ApiHelp' => 'includes/api/ApiHelp.php',
 	'ApiMain' => 'includes/api/ApiMain.php',
-	'ApiQueryBase' => 'includes/api/ApiQueryBase.php',
 	'ApiResult' => 'includes/api/ApiResult.php',
 
 	# API formats
@@ -41,7 +40,6 @@ $globAutoloadLocalClasses = array(
 
 	# API modules
 	'ApiTest' => 'includes/api/modules/ApiTest.php',
-	'ApiQueryTest' => 'includes/api/modules/ApiQueryTest.php',
 );
 
 class AutoLoader {
