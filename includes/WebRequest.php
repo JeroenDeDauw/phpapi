@@ -254,7 +254,7 @@ class WebRequest {
 					$data = $wgContLang->checkTitleEncoding( $data );
 				}
 			}
-			$data = $this->normalizeUnicode( $data );
+			//$data = $this->normalizeUnicode( $data );
 			return $data;
 		} else {
 			return $default;

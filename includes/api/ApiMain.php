@@ -502,11 +502,11 @@ class ApiMain extends ApiBase {
 	 */
 	protected function checkExecutePermissions( $module ) {
 		global $wgUser;
-		if ( $module->isReadMode() && !in_array( 'read', User::getGroupPermissions( array( '*' ) ), true ) &&
-			!$wgUser->isAllowed( 'read' ) )
-		{
-			$this->dieUsageMsg( array( 'readrequired' ) );
-		}
+		//if ( $module->isReadMode() && !in_array( 'read', User::getGroupPermissions( array( '*' ) ), true ) &&
+		//	!$wgUser->isAllowed( 'read' ) )
+		//{
+		//	$this->dieUsageMsg( array( 'readrequired' ) );
+		//}
 		if ( $module->isWriteMode() ) {
 			if ( !$this->mEnableWrite ) {
 				$this->dieUsageMsg( array( 'writedisabled' ) );
@@ -692,15 +692,18 @@ class ApiMain extends ApiBase {
 	 */
 	protected function getCredits() {
 		return array(
-			'API developers:',
+			'PHPAPI developers',
+			'    Jeroen De Dauw <Firstname><Lastname>@gmail.com',
+			'',
+			'MediaWiki API developers:',
 			'    Roan Kattouw <Firstname>.<Lastname>@gmail.com (lead developer Sep 2007-present)',
 			'    Victor Vasiliev - vasilvv at gee mail dot com',
 			'    Bryan Tong Minh - bryan . tongminh @ gmail . com',
 			'    Sam Reed - sam @ reedyboy . net',
 			'    Yuri Astrakhan <Firstname><Lastname>@gmail.com (creator, lead developer Sep 2006-Sep 2007)',
 			'',
-			'Please send your comments, suggestions and questions to mediawiki-api@lists.wikimedia.org',
-			'or file a bug report at http://bugzilla.wikimedia.org/'
+			'Please send your comments, suggestions and questions to jeroendedauw at gmail dot com',
+			'or file a bug report at https://github.com/JeroenDeDauw/phpapi/issues'
 		);
 	}
 	/**
