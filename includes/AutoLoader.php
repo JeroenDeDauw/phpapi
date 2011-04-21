@@ -21,25 +21,25 @@ $globAutoloadLocalClasses = array(
 	'Xml' => 'includes/Xml.php',
 
 	# API base
-	'ApiBase' => 'includes/api/ApiBase.php',
-	'ApiFormatBase' => 'includes/api/ApiFormatBase.php',
-	'ApiHelp' => 'includes/api/ApiHelp.php',
-	'ApiMain' => 'includes/api/ApiMain.php',
-	'ApiResult' => 'includes/api/ApiResult.php',
+	'ApiBase' => 'includes/apibase/ApiBase.php',
+	'ApiFormatBase' => 'includes/apibase/ApiFormatBase.php',
+	'ApiHelp' => 'includes/apibase/ApiHelp.php',
+	'ApiMain' => 'includes/apibase/ApiMain.php',
+	'ApiResult' => 'includes/apibase/ApiResult.php',
 
 	# API formats
-	'ApiFormatDbg' => 'includes/api/formats/ApiFormatDbg.php',
-	'ApiFormatDump' => 'includes/api/formats/ApiFormatDump.php',
-	'ApiFormatJson' => 'includes/api/formats/ApiFormatJson.php',
-	'ApiFormatPhp' => 'includes/api/formats/ApiFormatPhp.php',
-	'ApiFormatRaw' => 'includes/api/formats/ApiFormatRaw.php',
-	'ApiFormatTxt' => 'includes/api/formats/ApiFormatTxt.php',
-	'ApiFormatWddx' => 'includes/api/formats/ApiFormatWddx.php',
-	'ApiFormatXml' => 'includes/api/formats/ApiFormatXml.php',
-	'ApiFormatYaml' => 'includes/api/formats/ApiFormatYaml.php',
+	'ApiFormatDbg' => 'includes/formats/ApiFormatDbg.php',
+	'ApiFormatDump' => 'includes/formats/ApiFormatDump.php',
+	'ApiFormatJson' => 'includes/formats/ApiFormatJson.php',
+	'ApiFormatPhp' => 'includes/formats/ApiFormatPhp.php',
+	'ApiFormatRaw' => 'includes/formats/ApiFormatRaw.php',
+	'ApiFormatTxt' => 'includes/formats/ApiFormatTxt.php',
+	'ApiFormatWddx' => 'includes/formats/ApiFormatWddx.php',
+	'ApiFormatXml' => 'includes/formats/ApiFormatXml.php',
+	'ApiFormatYaml' => 'includes/formats/ApiFormatYaml.php',
 
 	# API modules
-	'ApiTest' => 'includes/api/modules/ApiTest.php',
+	'ApiTest' => 'includes/modules/ApiTest.php',
 );
 
 class AutoLoader {
