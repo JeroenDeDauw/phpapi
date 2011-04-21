@@ -1,0 +1,3 @@
+* Integrate Validator to have better parameter handling
+* Restructure API in such a way it can easily be put into a project while remaining separate from the project,
+  so the API itself can easily be updated.
