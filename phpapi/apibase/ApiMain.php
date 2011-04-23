@@ -670,7 +670,7 @@ class ApiMain extends ApiBase {
 	 * Returns an array of strings with credits for the API
 	 */
 	protected function getCredits() {
-		global $globAPIAuthors, $globAPIName;
+		global $globAPIAuthors, $globAPIName, $globIssueEmail, $globIssueUrl;
 		
 		$credits = array(
 			'PHPAPI developers:',
@@ -683,8 +683,8 @@ class ApiMain extends ApiBase {
 			'    Sam Reed - sam @ reedyboy . net',
 			'    Yuri Astrakhan <Firstname><Lastname>@gmail.com (creator, lead developer Sep 2006-Sep 2007)',
 			'',
-			'Please send your comments, suggestions and questions to jeroendedauw at gmail dot com',
-			'or file a bug report at https://github.com/JeroenDeDauw/phpapi/issues'
+			'Please send your comments, suggestions and questions to ' . $globIssueEmail,
+			'or file a bug report at ' . $globIssueUrl
 		);
 		
 		if ( count( $globAPIAuthors ) > 0 ) {
