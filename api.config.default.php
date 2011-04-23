@@ -4,6 +4,7 @@
 # Make sure you edit your copy at api.config.php, and not api.config.default.php!
 
 # API module registration
+// $globAutoloadClasses['ApiTest'] = $apiDir . '/modules/ApiTest.php';
 // $globAPIModules['test'] = 'ApiTest';
 
 # The name of the API.

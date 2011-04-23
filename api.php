@@ -50,6 +50,7 @@ define( 'MW_API', true );
 $apiDir = dirname( __FILE__ );
 
 $globAPIModules = array();
+$globAutoloadClasses = array();
 
 require $apiDir . ( file_exists( $apiDir . '/api.config.php' ) ? '/api.config.php' : '/api.config.default.php' );
 
