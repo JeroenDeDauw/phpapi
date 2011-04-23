@@ -652,29 +652,8 @@ class ApiMain extends ApiBase {
 	 * See ApiBase for description.
 	 */
 	public function getDescription() {
-		return array(
-			'',
-			'',
-			'**********************************************************************************************************',
-			'**                                                                                                      **',
-			'**                           This is an auto-generated API documentation page                           **',
-			'**                                                                                                      **',
-			'**                                    Documentation and Examples:                                       **',
-			'**                               https://github.com/JeroenDeDauw/phpapi                                 **',
-			'**                                                                                                      **',
-			'**********************************************************************************************************',
-			'',
-			'Status:                All features shown on this page should be working, but the API',
-			'                       is still in active development, and  may change at any time.',
-			'                       Make sure to monitor our mailing list for any updates',
-			'',
-			'Documentation:         https://github.com/JeroenDeDauw/phpapi',
-			'',
-			'',
-			'',
-			'',
-			'',
-		);
+		global $globAPIDescription;
+		return $globAPIDescription;
 	}
 
 	public function getPossibleErrors() {
@@ -691,8 +670,10 @@ class ApiMain extends ApiBase {
 	 * Returns an array of strings with credits for the API
 	 */
 	protected function getCredits() {
-		return array(
-			'PHPAPI developers',
+		global $globAPIAuthors, $globAPIName;
+		
+		$credits = array(
+			'PHPAPI developers:',
 			'    Jeroen De Dauw <Firstname><Lastname>@gmail.com',
 			'',
 			'MediaWiki API developers:',
@@ -705,6 +686,19 @@ class ApiMain extends ApiBase {
 			'Please send your comments, suggestions and questions to jeroendedauw at gmail dot com',
 			'or file a bug report at https://github.com/JeroenDeDauw/phpapi/issues'
 		);
+		
+		if ( count( $globAPIAuthors ) > 0 ) {
+			$specificCredits = array( "$globAPIName developers:" );
+			
+			foreach ( $globAPIAuthors as $author ) {
+				$specificCredits[] = "    $author";
+			}
+			
+			$specificCredits[] = '';
+			$credits = array_merge( $specificCredits, $credits );
+		}
+		
+		return $credits;
 	}
 	/**
 	 * Sets whether the pretty-printer should format *bold* and $italics$

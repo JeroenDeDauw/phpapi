@@ -151,9 +151,9 @@ abstract class ApiFormatBase extends ApiBase {
 <html>
 <head>
 <?php if ( $this->mUnescapeAmps ) {
-?>	<title>PHPAPI</title>
+?>	<title><?php echo $GLOBALS['globAPIName']; ?></title>
 <?php } else {
-?>	<title>PHPAPI Result</title>
+?>	<title><?php echo $GLOBALS['globAPIName']; ?> Result</title>
 <?php } ?>
 </head>
 <body>

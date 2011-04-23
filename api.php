@@ -44,6 +44,8 @@ $apiDir = dirname( __FILE__ );
 
 $globAPIModules = array();
 
+require $apiDir . ( file_exists( $apiDir . '/api.config.php' ) ? '/api.config.php' : '/api.config.default.php' );
+
 // Initialise common code
 require ( $apiDir . '/includes/WebStart.php' );
 
@@ -64,8 +66,6 @@ if ( $wgRequest->isPathInfoBad() ) {
 		'The API must be accessed through the primary script entry point.' );
 	return;
 }
-
-require $apiDir . ( file_exists( $apiDir . '/api.config.php' ) ? '/api.config.php' : '/api.config.default.php' );
 
 /* Construct an ApiMain with the arguments passed via the URL. What we get back
  * is some form of an ApiMain, possibly even one that produces an error message,
