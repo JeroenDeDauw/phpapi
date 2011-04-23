@@ -11,7 +11,7 @@ $globAPIName = 'Example Name API';
 
 # The authors of the API.
 $globAPIAuthors = array(
-	'Jeroen De Dauw <Firstname><Lastname>@gmail.com',
+	//'Jeroen De Dauw <Firstname><Lastname>@gmail.com',
 );
 
 # Array with lines that form the API description.
