@@ -12,34 +12,39 @@
  */
 global $globAutoloadLocalClasses, $globAutoloadClasses;
 
+$phpApiDir = dirname( __FILE__ ) . '/';
+$phpApiBaseDir = $phpApiDir . 'apibase/';
+$phpApiFormatDir = $phpApiDir . 'formats/';
+$phpApiModuleDir = $phpApiDir . 'modules/';
+
 $globAutoloadLocalClasses = array(
 	# Includes
-	'Sanitizer' => 'includes/Sanitizer.php',
-	'WebRequest' => 'includes/WebRequest.php',
-	'FauxRequest' => 'includes/WebRequest.php',
-	'Hooks' => 'includes/Hooks.php',
-	'Xml' => 'includes/Xml.php',
+	'Sanitizer' => $phpApiDir . 'Sanitizer.php',
+	'WebRequest' => $phpApiDir. 'WebRequest.php',
+	'FauxRequest' => $phpApiDir. 'WebRequest.php',
+	'Hooks' => $phpApiDir. 'Hooks.php',
+	'Xml' => $phpApiDir .'Xml.php',
 
 	# API base
-	'ApiBase' => 'includes/apibase/ApiBase.php',
-	'ApiFormatBase' => 'includes/apibase/ApiFormatBase.php',
-	'ApiHelp' => 'includes/apibase/ApiHelp.php',
-	'ApiMain' => 'includes/apibase/ApiMain.php',
-	'ApiResult' => 'includes/apibase/ApiResult.php',
+	'ApiBase' => $phpApiBaseDir . 'ApiBase.php',
+	'ApiFormatBase' => $phpApiBaseDir . 'ApiFormatBase.php',
+	'ApiHelp' => $phpApiBaseDir . 'ApiHelp.php',
+	'ApiMain' => $phpApiBaseDir . 'ApiMain.php',
+	'ApiResult' => $phpApiBaseDir . 'ApiResult.php',
 
 	# API formats
-	'ApiFormatDbg' => 'includes/formats/ApiFormatDbg.php',
-	'ApiFormatDump' => 'includes/formats/ApiFormatDump.php',
-	'ApiFormatJson' => 'includes/formats/ApiFormatJson.php',
-	'ApiFormatPhp' => 'includes/formats/ApiFormatPhp.php',
-	'ApiFormatRaw' => 'includes/formats/ApiFormatRaw.php',
-	'ApiFormatTxt' => 'includes/formats/ApiFormatTxt.php',
-	'ApiFormatWddx' => 'includes/formats/ApiFormatWddx.php',
-	'ApiFormatXml' => 'includes/formats/ApiFormatXml.php',
-	'ApiFormatYaml' => 'includes/formats/ApiFormatYaml.php',
+	'ApiFormatDbg' => $phpApiFormatDir . 'ApiFormatDbg.php',
+	'ApiFormatDump' => $phpApiFormatDir . 'ApiFormatDump.php',
+	'ApiFormatJson' => $phpApiFormatDir . 'ApiFormatJson.php',
+	'ApiFormatPhp' => $phpApiFormatDir . 'ApiFormatPhp.php',
+	'ApiFormatRaw' => $phpApiFormatDir . 'ApiFormatRaw.php',
+	'ApiFormatTxt' => $phpApiFormatDir . 'ApiFormatTxt.php',
+	'ApiFormatWddx' => $phpApiFormatDir . 'ApiFormatWddx.php',
+	'ApiFormatXml' => $phpApiFormatDir . 'ApiFormatXml.php',
+	'ApiFormatYaml' => $phpApiFormatDir . 'ApiFormatYaml.php',
 
 	# API modules
-	'ApiTest' => 'includes/modules/ApiTest.php',
+	'ApiTest' => $phpApiModuleDir . 'ApiTest.php',
 );
 
 class AutoLoader {

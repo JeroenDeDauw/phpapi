@@ -1,9 +1,9 @@
 <?php
 
 /**
- * API for MediaWiki 1.8+
+ * PHPAPI entry point, based on the MediaWiki API.
  *
- * Copyright (C) 2006 Yuri Astrakhan <Firstname><Lastname>@gmail.com
+ * @copyright 2006 Yuri Astrakhan <Firstname><Lastname>@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
  * http://www.gnu.org/copyleft/gpl.html
  *
  * @file
+ * @ingroup PHPAPI
  */
 
 /**
@@ -32,6 +33,12 @@
  * as specified in LocalSettings.php. It then invokes "execute()" on the
  * ApiMain object instance, which produces output in the format sepecified
  * in the URL.
+ */
+
+/**
+ * This documenation group collects source code files belonging to PHPAPI.
+ *
+ * @defgroup PHPAPI PHPAPI
  */
 
 error_reporting(E_ALL);
@@ -47,7 +54,7 @@ $globAPIModules = array();
 require $apiDir . ( file_exists( $apiDir . '/api.config.php' ) ? '/api.config.php' : '/api.config.default.php' );
 
 // Initialise common code
-require ( $apiDir . '/includes/WebStart.php' );
+require ( $apiDir . '/phpapi/WebStart.php' );
 
 // URL safety checks
 //
