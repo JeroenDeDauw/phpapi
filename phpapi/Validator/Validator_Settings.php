@@ -13,7 +13,7 @@
  * @author Jeroen De Dauw
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
+if ( !defined( 'PHP_API' ) ) {
 	die( 'Not an entry point.' );
 }
 

@@ -135,7 +135,7 @@ class WebRequest {
 		global $wgUsePathInfo;
 
 		// bug 16019: title interpolation on API queries is useless and sometimes harmful
-		if ( defined( 'MW_API' ) ) {
+		if ( defined( 'PHP_API' ) ) {
 			return;
 		}
 

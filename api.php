@@ -45,7 +45,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
 // So extensions (and other code) can check whether they're running in API mode
-define( 'MW_API', true );
+define( 'PHP_API', true );
 
 $apiDir = dirname( __FILE__ );
 

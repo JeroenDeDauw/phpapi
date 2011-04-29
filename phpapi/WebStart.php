@@ -34,8 +34,6 @@ if ( ini_get( 'register_globals' ) ) {
 	}
 }
 
-define( 'PHP_API', true );
-
 $globRequestTime = microtime( true );
 
 # Start the autoloader, so that extensions can derive classes from core files
