@@ -47,6 +47,8 @@ ini_set("display_errors", 1);
 // So extensions (and other code) can check whether they're running in API mode
 define( 'PHP_API', true );
 
+define( 'PHP_API_VERSION', '0.1 alpha' );
+
 $apiDir = dirname( __FILE__ );
 
 $globAPIModules = array();

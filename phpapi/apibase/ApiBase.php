@@ -29,9 +29,6 @@
  * all API classes.
  * The class functions are divided into several areas of functionality:
  *
- * Module parameters: Derived classes can define getAllowedParams() to specify
- * 	which parameters to expect,h ow to parse and validate them.
- *
  * Profiling: various methods to allow keeping tabs on various tasks and their
  * 	time costs
  *
@@ -242,7 +239,7 @@ abstract class ApiBase {
 
 			// Parameters
 			$paramsMsg = $this->makeHelpMsgParameters();
-			if ( $paramsMsg !== false ) {
+			if ( $paramsMsg != '' ) {
 				$msg .= "Parameters:\n$paramsMsg";
 			}
 
@@ -285,116 +282,25 @@ abstract class ApiBase {
 	/**
 	 * Generates the parameter descriptions for this module, to be displayed in the
 	 * module's help.
+     *
 	 * @return string
 	 */
 	public function makeHelpMsgParameters() {
-		$params = $this->getFinalParams();
-		if ( $params ) {
+		$params = $this->getFinalParameters();
+        $paramDescriptions = array();
+        $paramPrefix = "\n" . str_repeat( ' ', 19 );
 
-			$paramsDescription = $this->getFinalParamDescription();
-			$msg = '';
-			$paramPrefix = "\n" . str_repeat( ' ', 19 );
-			foreach ( $params as $paramName => $paramSettings ) {
-				$desc = isset( $paramsDescription[$paramName] ) ? $paramsDescription[$paramName] : '';
-				if ( is_array( $desc ) ) {
-					$desc = implode( $paramPrefix, $desc );
-				}
+        foreach ( $params as $param ) {
+            $desc = $param->getDescription();
+            $desc .= $paramPrefix . (
+                $param->isRequired() ? 'This parameter is required' : 'Default value: ' . (
+                    $param->isList() ? implode( ', ', $param->getDefault() ) : $param->getDefault()
+                )
+            );
+            $paramDescriptions[] = sprintf( "  %-14s - %s\n", $this->encodeParamName( $param->getName() ), $desc );
+        }
 
-				if ( !is_array( $paramSettings ) ) {
-					$paramSettings = array(
-						self::PARAM_DFLT => $paramSettings,
-					);
-				}
-
-				$deprecated = isset( $paramSettings[self::PARAM_DEPRECATED] ) ?
-					$paramSettings[self::PARAM_DEPRECATED] : false;
-				if ( $deprecated ) {
-					$desc = "DEPRECATED! $desc";
-				}
-
-				$required = isset( $paramSettings[self::PARAM_REQUIRED] ) ?
-					$paramSettings[self::PARAM_REQUIRED] : false;
-				if ( $required ) {
-					$desc .= $paramPrefix . "This parameter is required";
-				}
-
-				$type = isset( $paramSettings[self::PARAM_TYPE] ) ? $paramSettings[self::PARAM_TYPE] : null;
-				if ( isset( $type ) ) {
-					if ( isset( $paramSettings[self::PARAM_ISMULTI] ) ) {
-						$prompt = 'Values (separate with \'|\'): ';
-					} else {
-						$prompt = 'One value: ';
-					}
-
-					if ( is_array( $type ) ) {
-						$choices = array();
-						$nothingPrompt = false;
-						foreach ( $type as $t ) {
-							if ( $t === '' ) {
-								$nothingPrompt = 'Can be empty, or ';
-							} else {
-								$choices[] =  $t;
-							}
-						}
-						$desc .= $paramPrefix . $nothingPrompt . $prompt;
-						$choicesstring = implode( ', ', $choices );
-						$desc .= wordwrap( $choicesstring, 100, "\n                       " );
-					} else {
-						switch ( $type ) {
-							case 'namespace':
-								// Special handling because namespaces are type-limited, yet they are not given
-								$desc .= $paramPrefix . $prompt . implode( ', ', MWNamespace::getValidNamespaces() );
-								break;
-							case 'limit':
-								$desc .= $paramPrefix . "No more than {$paramSettings[self :: PARAM_MAX]}";
-								if ( isset( $paramSettings[self::PARAM_MAX2] ) ) {
-									$desc .= " ({$paramSettings[self::PARAM_MAX2]} for bots)";
-								}
-								$desc .= ' allowed';
-								break;
-							case 'integer':
-								$hasMin = isset( $paramSettings[self::PARAM_MIN] );
-								$hasMax = isset( $paramSettings[self::PARAM_MAX] );
-								if ( $hasMin || $hasMax ) {
-									if ( !$hasMax ) {
-										$intRangeStr = "The value must be no less than {$paramSettings[self::PARAM_MIN]}";
-									} elseif ( !$hasMin ) {
-										$intRangeStr = "The value must be no more than {$paramSettings[self::PARAM_MAX]}";
-									} else {
-										$intRangeStr = "The value must be between {$paramSettings[self::PARAM_MIN]} and {$paramSettings[self::PARAM_MAX]}";
-									}
-
-									$desc .= $paramPrefix . $intRangeStr;
-								}
-								break;
-						}
-
-						if ( isset( $paramSettings[self::PARAM_ISMULTI] ) ) {
-							$isArray = is_array( $paramSettings[self::PARAM_TYPE] );
-
-							if ( !$isArray
-									|| $isArray && count( $paramSettings[self::PARAM_TYPE] ) > self::LIMIT_SML1 ) {
-								$desc .= $paramPrefix . "Maximum number of values " .
-									self::LIMIT_SML1 . " (" . self::LIMIT_SML2 . " for bots)";
-							}
-						}
-					}
-				}
-
-				$default = is_array( $paramSettings )
-						? ( isset( $paramSettings[self::PARAM_DFLT] ) ? $paramSettings[self::PARAM_DFLT] : null )
-						: $paramSettings;
-				if ( !is_null( $default ) && $default !== false ) {
-					$desc .= $paramPrefix . "Default: $default";
-				}
-
-				$msg .= sprintf( "  %-14s - %s\n", $this->encodeParamName( $paramName ), $desc );
-			}
-			return $msg;
-
-		} else {
-			return false;
-		}
+        return implode( "\n", $paramDescriptions );
 	}
 
 	/**
@@ -449,46 +355,28 @@ abstract class ApiBase {
 	}
 
 	/**
-	 * Returns an array of allowed parameters (parameter name) => (default
-	 * value) or (parameter name) => (array with PARAM_* constants as keys)
-	 * Don't call this function directly: use getFinalParams() to allow
-	 * hooks to modify parameters as needed.
+	 * Returns an array of parameter definitions.
+     * Do not call directly, but use getFinalParameters, so hooks can modify
+     * the parameters before they are returned.
+	 * 
+	 * @since 0.1
+	 * 
 	 * @return array
 	 */
-	protected function getAllowedParams() {
-		return false;
+	protected function getParameters() {
+		return array();
 	}
 
 	/**
-	 * Returns an array of parameter descriptions.
-	 * Don't call this functon directly: use getFinalParamDescription() to
-	 * allow hooks to modify descriptions as needed.
-	 * @return array
-	 */
-	protected function getParamDescription() {
-		return false;
-	}
-
-	/**
-	 * Get final list of parameters, after hooks have had a chance to
+	 * Get final list of parameter definitions, after hooks have had a chance to
 	 * tweak it as needed.
+     *
 	 * @return array
 	 */
-	public function getFinalParams() {
-		$params = $this->getAllowedParams();
-		apiRunHooks( 'APIGetAllowedParams', array( &$this, &$params ) );
+	public function getFinalParameters() {
+		$params = $this->getParameters();
+		apiRunHooks( 'APIGetAllowedParamseters', array( &$this, &$params ) );
 		return $params;
-	}
-
-	/**
-	 * Get final description, after hooks have had a chance to tweak it as
-	 * needed.
-	 * @return array
-	 */
-	public function getFinalParamDescription() {
-		$desc = $this->getParamDescription();
-		apiRunHooks( 'APIGetParamDescription', array( &$this, &$desc ) );
-		return $desc;
 	}
 
 	/**
@@ -513,15 +401,13 @@ abstract class ApiBase {
 	public function extractRequestParams( $parseLimit = true ) {
 		// Cache parameters, for performance and to avoid bug 24564.
 		if ( !isset( $this->mParamCache[$parseLimit] ) ) {
-			$params = $this->getFinalParams();
+			$params = $this->getFinalParameters();
 			$results = array();
-
-			if ( $params ) { // getFinalParams() can return false
-				foreach ( $params as $paramName => $paramSettings ) {
-					$results[$paramName] = $this->getParameterFromSettings(
-						$paramName, $paramSettings, $parseLimit );
-				}
-			}
+// TODO
+            foreach ( $params as $paramName => $paramSettings ) {
+                $results[$paramName] = $this->getParameterFromSettings(
+                    $paramName, $paramSettings, $parseLimit );
+            }
 			$this->mParamCache[$parseLimit] = $results;
 		}
 		return $this->mParamCache[$parseLimit];
@@ -534,7 +420,7 @@ abstract class ApiBase {
 	 * @return mixed Parameter value
 	 */
 	protected function getParameter( $paramName, $parseLimit = true ) {
-		$params = $this->getFinalParams();
+		$params = $this->getFinalParameters(); // TODO
 		$paramSettings = $params[$paramName];
 		return $this->getParameterFromSettings( $paramName, $paramSettings, $parseLimit );
 	}
