@@ -43,3 +43,7 @@ $globAPIDescription = array(
 # Where to report issues
 $globIssueEmail = 'jeroendedauw at gmail dot com';
 $globIssueUrl = 'https://github.com/JeroenDeDauw/phpapi/issues';
+
+// $globHooks[''] = '';
+
+require_once( $apiDir . '/phpapi/extensions/Validator/Validator.php' );

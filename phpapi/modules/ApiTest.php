@@ -46,7 +46,22 @@ class ApiTest extends ApiBase {
 		);		
 	}
 
-
+	public function getParameters() {
+		$params = array(); // parent::getParameters();
+		
+		$params['foo'] = new Parameter( 'foo' );
+		$params['foo']->setDescription( 'Simple demo parameter of type string that is required.' );
+		
+		$params['bar'] = new Parameter( 'bar', Parameter::TYPE_INTEGER, 0 );
+		$params['bar']->setDescription( 'Demo parameter of type integer, optional.' );
+		
+		$params['baz'] = new ListParameter( 'baz' );
+		$params['bar']->setDescription( 'Demo parameter of type integer, optional.' );
+		$params['bar']->setDefault( array( 'spam', 'spamz', 'spamzz' ) );
+		
+		return $params;
+	}
+	
 	public function getAllowedParams() {
 		return array(
 			'foo' => array(

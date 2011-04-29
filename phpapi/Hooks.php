@@ -24,9 +24,9 @@
  */
 
 /**
- * Call hook functions defined in $wgHooks
+ * Call hook functions defined in $globHooks
  *
- * Because programmers assign to $wgHooks, we need to be very
+ * Because programmers assign to $globHooks, we need to be very
  * careful about its contents. So, there's a lot more error-checking
  * in here than would normally be necessary.
  *
@@ -41,7 +41,7 @@ function apiRunHooks( $event, $args = array() ) {
 /**
  * Hooks class.
  *
- * Used to supersede $wgHooks, because globals are EVIL.
+ * Used to supersede $globHooks, because globals are EVIL.
  */
 class Hooks {
 
@@ -93,7 +93,7 @@ class Hooks {
 	/**
 	 * Call hook functions defined in Hooks::register
 	 *
-	 * Because programmers assign to $wgHooks, we need to be very
+	 * Because programmers assign to $globHooks, we need to be very
 	 * careful about its contents. So, there's a lot more error-checking
 	 * in here than would normally be necessary.
 	 *
@@ -102,10 +102,10 @@ class Hooks {
 	 * @return Boolean
 	 */
 	public static function run( $event, $args = array() ) {
-		global $wgHooks;
+		global $globHooks;
 
 		// Return quickly in the most common case
-		if ( !isset( self::$handlers[$event] ) && !isset( $wgHooks[$event] ) ) {
+		if ( !isset( self::$handlers[$event] ) && !isset( $globHooks[$event] ) ) {
 			return true;
 		}
 
@@ -113,12 +113,12 @@ class Hooks {
 			throw new MWException( "Local hooks array is not an array!\n" );
 		}
 
-		if ( !is_array( $wgHooks ) ) {
+		if ( !is_array( $globHooks ) ) {
 			throw new MWException( "Global hooks array is not an array!\n" );
 		}
 
 		$new_handlers = (array) self::$handlers;
-		$old_handlers = (array) $wgHooks;
+		$old_handlers = (array) $globHooks;
 
 		$hook_array = array_merge( $new_handlers, $old_handlers );
 

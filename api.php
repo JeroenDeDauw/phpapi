@@ -51,6 +51,7 @@ $apiDir = dirname( __FILE__ );
 
 $globAPIModules = array();
 $globAutoloadClasses = array();
+$globHooks = array();
 
 require $apiDir . ( file_exists( $apiDir . '/api.config.php' ) ? '/api.config.php' : '/api.config.default.php' );
 

@@ -26,7 +26,7 @@ if ( !defined( 'PHP_API' ) ) {
 	die( 'Not an entry point.' );
 }
 
-define( 'Validator_VERSION', '0.4.6' );
+define( 'Validator_VERSION', '0.4.6 PHPAPI clone' );
 
 // Register the internationalization file.
 $wgExtensionMessagesFiles['Validator'] = dirname( __FILE__ ) . '/Validator.i18n.php';
@@ -78,3 +78,5 @@ unset( $incDir );
 require_once 'includes/ValidationError.php' ;
 // Include the settings file.
 require_once 'Validator_Settings.php';
+
+require_once 'Language.php';
